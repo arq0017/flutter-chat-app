@@ -1,4 +1,4 @@
-import 'package:chat_single_app/screen/chat_screen.dart';
+import 'package:chat_single_app/screen/auth_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -21,11 +21,16 @@ class _MyAppState extends State<MyApp> {
       builder: (context, snapshot) =>
           snapshot.connectionState == ConnectionState.done
               ? MaterialApp(
+                  debugShowCheckedModeBanner: false,
                   title: 'Flutter Demo',
-                  theme: ThemeData(
+                  darkTheme: ThemeData(
+                    brightness: Brightness.dark,
                     primarySwatch: Colors.blue,
+                    primaryColor: Colors.red[700],
+                    accentColor: Color(0xFFE7622F),
+                    cardColor: Colors.black,
                   ),
-                  home: ChatScreen(),
+                  home: AuthScreen(),
                 )
               : Center(child: CircularProgressIndicator()),
     );
