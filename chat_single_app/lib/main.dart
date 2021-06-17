@@ -1,4 +1,6 @@
 import 'package:chat_single_app/screen/auth_screen.dart';
+import 'package:chat_single_app/screen/chat_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -25,12 +27,17 @@ class _MyAppState extends State<MyApp> {
                   title: 'Flutter Demo',
                   darkTheme: ThemeData(
                     brightness: Brightness.dark,
-                    primarySwatch: Colors.blue,
-                    primaryColor: Colors.red[700],
-                    accentColor: Color(0xFFE7622F),
+                    accentColor: Colors.blue,
+                    primaryColor: Colors.red,
+                    primarySwatch: Colors.amber,
                     cardColor: Colors.black,
                   ),
-                  home: AuthScreen(),
+                  home: StreamBuilder(
+                      stream: FirebaseAuth.instance.authStateChanges(),
+                      builder: (ctx, snapshot) {
+                        if (snapshot.hasData) return ChatScreen();
+                        return AuthScreen();
+                      }),
                 )
               : Center(child: CircularProgressIndicator()),
     );

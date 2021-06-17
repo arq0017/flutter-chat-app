@@ -1,10 +1,13 @@
+
+import 'package:chat_single_app/widget/image_picker/user_image_picker.dart';
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
   final void Function(String email, String username, String password,
-      bool isLogin, BuildContext context) submitFn;
+       bool isLogin, BuildContext context) submitFn;
+  final isLoading;
 
-  AuthForm(this.submitFn);
+  AuthForm(this.submitFn, this.isLoading);
 
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -30,7 +33,6 @@ class _AuthFormState extends State<AuthForm> {
         _isLogin,
         context,
       );
-      // send the data to user auth
     }
   }
 
@@ -55,6 +57,9 @@ class _AuthFormState extends State<AuthForm> {
                 // takes only limited space
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  //! profile picture
+                  if (!_isLogin) UserImagePicker(),
+
                   //! email
                   TextFormField(
                     key: ValueKey('email'),
@@ -98,25 +103,29 @@ class _AuthFormState extends State<AuthForm> {
                     },
                   ),
                   SizedBox(height: 12),
-                  ElevatedButton(
-                      style: raisedButtonStyle,
-                      onPressed: () {
-                        FocusScopeNode currentFocus = FocusScope.of(context);
-                        if (!currentFocus.hasPrimaryFocus) {
-                          currentFocus.unfocus();
-                        }
-                        _trySubmit();
-                      },
-                      child: Text(_isLogin ? 'Login' : 'SignUp')),
-                  TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                        });
-                      },
-                      child: Text(_isLogin
-                          ? 'Create new account'
-                          : 'Already have an account'))
+                  if (widget.isLoading)
+                    CircularProgressIndicator()
+                  else
+                    ElevatedButton(
+                        style: raisedButtonStyle,
+                        onPressed: () {
+                          FocusScopeNode currentFocus = FocusScope.of(context);
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
+                          _trySubmit();
+                        },
+                        child: Text(_isLogin ? 'Login' : 'SignUp')),
+                  if (!widget.isLoading)
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _isLogin = !_isLogin;
+                          });
+                        },
+                        child: Text(_isLogin
+                            ? 'Create new account'
+                            : 'Already have an account'))
                 ],
               ),
             ),
