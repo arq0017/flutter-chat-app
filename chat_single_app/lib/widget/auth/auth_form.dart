@@ -36,7 +36,6 @@ class _AuthFormState extends State<AuthForm> {
 
   void _trySubmit() {
     final isValid = _formKey.currentState!.validate();
-    FocusScope.of(context).unfocus();
 
     if (_userImageFile == null && !_isLogin) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -47,6 +46,7 @@ class _AuthFormState extends State<AuthForm> {
       ));
       return null;
     }
+    if (_isLogin) _userImageFile = File('file.txt');
 
     if (isValid) {
       _formKey.currentState!.save();
