@@ -42,19 +42,22 @@ class _AuthScreenState extends State<AuthScreen> {
         User user = result.user;
 
         // Storing image in storage bucket
-
         final ref = FirebaseStorage.instance
             .ref()
             .child('user_images')
             .child(user.uid + '.jpg');
-        ref.putFile(image); 
+        ref.putFile(image).whenComplete(() async {
+          final url = await ref.getDownloadURL();
+          var users = FirebaseFirestore.instance.collection('users');
+          users.doc(user.uid).set({
+            'username': username,
+            'email': email,
+            'image_url': url,
+          });
+        });
 
         // Storing the extra user data
-        var users = FirebaseFirestore.instance.collection('users');
-        users.doc(user.uid).set({
-          'username': username,
-          'email': email,
-        });
+
       }
     } on FirebaseAuthException catch (error) {
       var message = "An error occured , please try again ";

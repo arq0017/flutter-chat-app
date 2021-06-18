@@ -22,11 +22,15 @@ class Messages extends StatelessWidget {
               var obtainedUserId = document[index]['userId'];
               var currentUser = FirebaseAuth.instance.currentUser!.uid;
               bool isMe = obtainedUserId == currentUser ? true : false;
-              return MessageBubble(
-                isMe,
-                document[index]['text'],
-                document[index]['username'],
-                ValueKey(document[index].id),
+              return Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: MessageBubble(
+                  isMe,
+                  document[index]['text'],
+                  document[index]['username'],
+                  document[index]['userImage'],
+                  ValueKey(document[index].id),
+                ),
               );
             },
           );
